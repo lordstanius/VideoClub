@@ -75,7 +75,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RentalViewModel.cs" />
     <Compile Include="UserViewModel.cs" />
-    <Compile Include="VideoStoreProvider.cs" />
     <Compile Include="ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,9 +82,9 @@
       <Project>{e2f3eec7-3f79-4a0b-9cd8-58876a64ab77}</Project>
       <Name>Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Service\Service.csproj">
-      <Project>{2a11b246-9fe6-4ef5-8800-af8f7c19e350}</Project>
-      <Name>Service</Name>
+    <ProjectReference Include="..\ServiceProvider\ServiceProvider.csproj">
+      <Project>{a1926c9f-df6d-417e-95d4-cc2267025924}</Project>
+      <Name>ServiceProvider</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,10 @@
-﻿using Model;
-using Service;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Model;
 using System.ServiceModel;
 
-namespace ViewModel
+namespace ServiceProvider
 {
-	class VideoStoreProvider : ClientBase<IVideoStore>, IVideoStore
+	class VideoStoreProvider : ClientBase<Service.IVideoStore>, IVideoStore
 	{
 		public Movie GetMovie(int id)
 		{

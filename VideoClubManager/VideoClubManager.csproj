@@ -138,9 +138,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Service\Service.csproj">
-      <Project>{2a11b246-9fe6-4ef5-8800-af8f7c19e350}</Project>
-      <Name>Service</Name>
+    <ProjectReference Include="..\ServiceProvider\ServiceProvider.csproj">
+      <Project>{a1926c9f-df6d-417e-95d4-cc2267025924}</Project>
+      <Name>ServiceProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
       <Project>{03ee9987-8d44-4ebb-a160-2175a74eb71e}</Project>

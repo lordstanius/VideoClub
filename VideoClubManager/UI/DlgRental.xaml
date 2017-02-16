@@ -11,12 +11,12 @@
 		ResizeMode="NoResize"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance {x:Type vm:DlgRentalViewModel}}"
-		Height="300"
-		Width="400">
+		Height="310"
+		Width="420">
 
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition />
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto" />
 			<RowDefinition />
 		</Grid.RowDefinitions>
@@ -29,7 +29,6 @@
 				<RowDefinition Height="30" />
 				<RowDefinition Height="30" />
 				<RowDefinition Height="30" />
-				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 			<TextBlock Text="{x:Static local:Strings.txtUserName}"
 					   VerticalAlignment="Center"
@@ -37,6 +36,8 @@
 					   HorizontalAlignment="Right"
 					   TextWrapping="Wrap" />
 			<ComboBox Grid.Column="1"
+					  ItemsSource="{Binding Users}"
+					  SelectedItem="{Binding CurrentUser, Mode=TwoWay}"
 					  Height="22"
 					  IsEditable="True" />
 
@@ -49,6 +50,8 @@
 			<TextBox IsReadOnly="True"
 					 Grid.Column="1"
 					 Grid.Row="1"
+					 VerticalContentAlignment="Center"
+					 Text="{Binding Address, Mode=OneWay}"
 					 Height="22" />
 
 			<TextBlock Text="{x:Static local:Strings.txtPhoneNum}"
@@ -60,27 +63,31 @@
 			<Grid Grid.Column="1"
 				  Grid.Row="2">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="90" />
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition />
 				</Grid.ColumnDefinitions>
 
 				<TextBox IsReadOnly="True"
+						 Text="{Binding Phone, Mode=OneWay}"
+						 VerticalContentAlignment="Center"
 						 Height="22"
 						 Grid.Column="0" />
 
 				<TextBlock Text="{x:Static local:Strings.txtEmail}"
 						   VerticalAlignment="Center"
-						   Margin="20,0,10,0"
+						   Margin="15,0,10,0"
 						   Grid.Column="1" />
 
 				<TextBox IsReadOnly="True"
+						 VerticalContentAlignment="Center"
+						 Text="{Binding Email, Mode=OneWay}"
 						 Height="22"
 						 Grid.Column="2" />
 			</Grid>
 		</Grid>
 		<Grid Grid.Row="1">
-			<Grid Margin="10">
+			<Grid Margin="10,15,10,6">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition />
@@ -91,9 +98,13 @@
 						   VerticalAlignment="Center" />
 
 				<ComboBox Grid.Column="1"
+						  ItemsSource="{Binding Movies}"
+						  SelectedItem="{Binding CurrentMovie}"
+						  IsEnabled="{Binding CanSelectMovie, Mode=OneWay}"
 						  Margin="10,0,20,0" />
 
 				<Button Content="{x:Static local:Strings.txtAdd}"
+						Command="{Binding AddMovieCommand}"
 						Grid.Column="2"
 						Width="70" />
 			</Grid>
@@ -102,30 +113,35 @@
 			  Margin="10,0,10,0">
 			<Grid.RowDefinitions>
 				<RowDefinition />
-				<RowDefinition Height="Auto" />
+				<RowDefinition Height="38" />
 			</Grid.RowDefinitions>
-			<ListBox>
-
+			<ListBox ItemsSource="{Binding ChosenMovies}"
+					 SelectionMode="Single"
+					 SelectedItem="{Binding SelectedMovie, Mode=TwoWay}">
 			</ListBox>
 			<StackPanel Grid.Row="1"
-						Margin="10,10,0,10"
+						Margin="10,6,0,10"
 						HorizontalAlignment="Right"
 						Orientation="Horizontal">
 				<Button Content="{x:Static local:Strings.txtOk}"
 						Command="{Binding OkCommand}"
-						Width="70" />
+						Width="70"
+						Height="22"/>
 				
 				<Separator Margin="10,0" />
 				
 				<Button Content="{x:Static local:Strings.txtCancel}"
 						IsCancel="True"
+						Height="22"
 						Width="70" />
 			</StackPanel>
 			<Button Content="{x:Static local:Strings.txtRemove}"
 					Grid.Row="1"
-					Margin="0,10,0,10"
+					Margin="0,6,0,10"
 					HorizontalAlignment="Left"
 					Padding="10,0,10,0"
+					Height="22"
+					Command="{Binding RemoveMovieCommand}"
 					Width="Auto" />
 		</Grid>
 	</Grid>
