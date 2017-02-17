@@ -11,12 +11,13 @@
 		ResizeMode="NoResize"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance {x:Type vm:DlgRentalViewModel}}"
-		Height="310"
-		Width="420">
+		Height="330"
+		Width="430">
 
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition />
 		</Grid.RowDefinitions>
@@ -86,7 +87,24 @@
 						 Grid.Column="2" />
 			</Grid>
 		</Grid>
-		<Grid Grid.Row="1">
+
+		<Grid Grid.Row="1"
+			  Visibility="{Binding WarningVisibility, Mode=OneWay}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Image Source="/Resources/bullet_error.png"
+				   Margin="10,0"/>
+
+			<TextBlock  Text="{x:Static local:Strings.txtRentalNotAllowed}"
+						Grid.Column="1"
+						Margin="10,0,0,0"
+						TextWrapping="Wrap"
+						Foreground="Red" />
+		</Grid>
+
+		<Grid Grid.Row="2">
 			<Grid Margin="10,15,10,6">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
@@ -109,7 +127,8 @@
 						Width="70" />
 			</Grid>
 		</Grid>
-		<Grid Grid.Row="2"
+
+		<Grid Grid.Row="3"
 			  Margin="10,0,10,0">
 			<Grid.RowDefinitions>
 				<RowDefinition />
@@ -126,10 +145,10 @@
 				<Button Content="{x:Static local:Strings.txtOk}"
 						Command="{Binding OkCommand}"
 						Width="70"
-						Height="22"/>
-				
+						Height="22" />
+
 				<Separator Margin="10,0" />
-				
+
 				<Button Content="{x:Static local:Strings.txtCancel}"
 						IsCancel="True"
 						Height="22"

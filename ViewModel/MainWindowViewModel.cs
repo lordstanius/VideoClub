@@ -5,7 +5,7 @@ using Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using MvvmDialogs;
-using ServiceProvider;
+using Contracts;
 
 namespace ViewModel
 {
@@ -18,12 +18,15 @@ namespace ViewModel
 		private IEnumerable<Rental> _rentals;
 		private readonly IVideoStore _videoStoreService;
 		private readonly IDialogService _dialogService;
+		private readonly IVideoClubRules _rules;
 		private Filter _currentFilter = Filter.NoFilter;
 
-		public MainWindowViewModel(IDialogService dialogService, IVideoStore videoStoreService)
+		public MainWindowViewModel(IDialogService dialogService, IVideoStore videoStoreService, IVideoClubRules rules)
 		{
 			_dialogService = dialogService;
 			_videoStoreService = videoStoreService;
+			_rules = rules;
+
 			Rentals = new ObservableCollection<RentalViewModel>();
 			Users = new ObservableCollection<UserViewModel>();
 			DateOfRentCollection = new ObservableCollection<DateTimeViewModel>();
@@ -219,7 +222,7 @@ namespace ViewModel
 
 		private void ShowRentalDialog()
 		{
-			var dialogViewModel = new DlgRentalViewModel(_videoStoreService);
+			var dialogViewModel = new DlgRentalViewModel(_videoStoreService, _rules);
 
 			_dialogService.ShowDialog(this, dialogViewModel);
 		}

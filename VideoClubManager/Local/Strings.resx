@@ -168,6 +168,9 @@
   <data name="txtRent" xml:space="preserve">
     <value>Rent</value>
   </data>
+  <data name="txtRentalNotAllowed" xml:space="preserve">
+    <value>Rental is not allowed. User must return all rented movies before making a new rental.</value>
+  </data>
   <data name="txtRented" xml:space="preserve">
     <value>Rented</value>
   </data>

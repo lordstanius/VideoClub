@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Ioc;
+using BusinessLogic;
+using Contracts;
 using MvvmDialogs;
 using ServiceProvider;
 
@@ -14,6 +16,7 @@ namespace VideoClubManager
 		{
 			SimpleIoc.Default.Register<IDialogService>(() => new DialogService(new DialogLocator()));
 			SimpleIoc.Default.Register<IVideoStore>(() => VideoStore.GetService());
+			SimpleIoc.Default.Register<IVideoClubRules>(() => new VideoClubRules());
 		}
 	}
 }

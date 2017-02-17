@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using Model;
 using System.ServiceModel;
+using Model;
+using Contracts;
 
 namespace ServiceProvider
 {
-	class VideoStoreProvider : ClientBase<Service.IVideoStore>, IVideoStore
+	public class VideoStoreProvider : ClientBase<Service.IVideoStore>, IVideoStore
 	{
 		public Movie GetMovie(int id)
 		{

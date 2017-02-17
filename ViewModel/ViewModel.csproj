@@ -50,6 +50,7 @@
       <HintPath>..\packages\MvvmDialogs.4.0.0\lib\net45\MvvmDialogs.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -78,13 +79,13 @@
     <Compile Include="ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj">
+      <Project>{565108b3-e722-4332-b473-b8bd5323015d}</Project>
+      <Name>Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{e2f3eec7-3f79-4a0b-9cd8-58876a64ab77}</Project>
       <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ServiceProvider\ServiceProvider.csproj">
-      <Project>{a1926c9f-df6d-417e-95d4-cc2267025924}</Project>
-      <Name>ServiceProvider</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

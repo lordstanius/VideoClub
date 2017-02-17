@@ -214,6 +214,15 @@ namespace VideoClubManager.Local {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rental is not allowed. User must return all rented movies before making a new rental..
+        /// </summary>
+        public static string txtRentalNotAllowed {
+            get {
+                return ResourceManager.GetString("txtRentalNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rented.
         /// </summary>
         public static string txtRented {

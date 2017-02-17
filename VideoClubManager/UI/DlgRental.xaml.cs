@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using MvvmDialogs;
+﻿using System.Windows;
 
 namespace VideoClubManager.UI
 {

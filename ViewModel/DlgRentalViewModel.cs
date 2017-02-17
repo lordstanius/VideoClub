@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Collections.ObjectModel;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Contracts;
 using MvvmDialogs;
-using ServiceProvider;
-using System;
 
 namespace ViewModel
 {
@@ -15,11 +15,13 @@ namespace ViewModel
 		private MovieViewModel _currentMovie;
 		private MovieViewModel _selectedMovie;
 		private IVideoStore _videoStoreService;
+		private IVideoClubRules _rules;
 
-		public DlgRentalViewModel(IVideoStore videoStoreService)
+		public DlgRentalViewModel(IVideoStore videoStoreService, IVideoClubRules rules)
 		{
 			_videoStoreService = videoStoreService;
 
+			_rules = rules;
 
 			Movies = new ObservableCollection<MovieViewModel>();
 			ChosenMovies = new ObservableCollection<MovieViewModel>();
@@ -27,7 +29,10 @@ namespace ViewModel
 
 			foreach (var item in _videoStoreService.GetMovies())
 			{
-				Movies.Add(new MovieViewModel(item));
+				if (item.NumOfCopies > 0)
+				{
+					Movies.Add(new MovieViewModel(item));
+				}
 			}
 
 			foreach (var item in _videoStoreService.GetUsers())
@@ -36,8 +41,10 @@ namespace ViewModel
 			}
 
 			OkCommand = new RelayCommand(CompleteRental, () => IsInputValid);
-			AddMovieCommand = new RelayCommand(AddMovie, () => _currentMovie != null && !ChosenMovies.Contains(_currentMovie) && ChosenMovies.Count < 4);
+			AddMovieCommand = new RelayCommand(AddMovie, () => CanAddMovie && IsRentingAllowed);
 			RemoveMovieCommand = new RelayCommand(RemoveMovie, () => _selectedMovie != null);
+
+			WarningVisibility = Visibility.Hidden;
 		}
 
 		public RelayCommand OkCommand { get; private set; }
@@ -52,16 +59,9 @@ namespace ViewModel
 
 		public ObservableCollection<UserViewModel> Users { get; private set; }
 
-		public bool CanSelectMovie { get { return _currentUser != null; } }
+		public bool CanSelectMovie { get { return _currentUser != null && IsRentingAllowed; } }
 
-		public bool IsInputValid
-		{
-			get
-			{
-				// TODO: Perform bussiness logic here
-				return _currentUser != null && ChosenMovies.Count >= 1;
-			}
-		}
+		public Visibility WarningVisibility { get; private set; }
 
 		public UserViewModel CurrentUser
 		{
@@ -73,10 +73,13 @@ namespace ViewModel
 			{
 				if (Set(ref _currentUser, value))
 				{
+					WarningVisibility = IsRentingAllowed ? Visibility.Hidden : Visibility.Visible;
+
 					RaisePropertyChanged(nameof(Address));
 					RaisePropertyChanged(nameof(Phone));
 					RaisePropertyChanged(nameof(Email));
 					RaisePropertyChanged(nameof(CanSelectMovie));
+					RaisePropertyChanged(nameof(WarningVisibility));
 					OkCommand.RaiseCanExecuteChanged();
 				}
 			}
@@ -128,6 +131,49 @@ namespace ViewModel
 		{
 			get { return _dialogResult; }
 			set { Set(ref _dialogResult, value); }
+		}
+
+		public bool IsInputValid
+		{
+			get
+			{
+				return _currentUser != null && ChosenMovies.Count >= 1;
+			}
+		}
+
+		private bool IsRentingAllowed
+		{
+			get
+			{
+				if (!_rules.AllowMultipleRentals)
+				{
+					var user = _videoStoreService.GetRentals().FirstOrDefault(r => r.UserId == _currentUser.Model.Id);
+					if (user != null)
+					{
+						// Found: user has some movies already rented
+						return false;
+					}
+				}
+
+				return true;
+			}
+		}
+
+		private bool CanAddMovie
+		{
+			get
+			{
+				if (_currentMovie == null)
+					return false;
+
+				if (!_rules.AllowMultipleCopies && ChosenMovies.Contains(_currentMovie))
+					return false;
+
+				if (ChosenMovies.Count >= _rules.MovieNumberLimit)
+					return false;
+
+				return true;
+			}
 		}
 
 		private void CompleteRental()
