@@ -24,5 +24,9 @@ namespace Contracts
 		Rental GetRental(int id);
 
 		IEnumerable<Rental> GetRentals();
+
+		IEnumerable<RentedMovie> GetRentedMoviesByUser(int userId);
+
+		IEnumerable<RentedMovie> GetRentedMoviesByMovie(int movieId);
 	}
 }

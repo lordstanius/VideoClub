@@ -13,6 +13,7 @@ namespace Service
 			using (var videoStore = new VideoStoreContext())
 			{
 				AddRental(videoStore, userId, movieId);
+				
 				videoStore.SaveChanges();
 			}
 		}
@@ -77,6 +78,26 @@ namespace Service
 			}
 		}
 
+		public IEnumerable<RentedMovie> GetRentedMoviesByUser(int userId)
+		{
+			using (var videoStore = new VideoStoreContext())
+			{
+				return videoStore.RentedMovies
+					.Where(r => r.UserId == userId)
+					.ToList();
+			}
+		}
+
+		public IEnumerable<RentedMovie> GetRentedMoviesByMovie(int movieId)
+		{
+			using (var videoStore = new VideoStoreContext())
+			{
+				return videoStore.RentedMovies
+					.Where(r => r.MovieId == movieId)
+					.ToList();
+			}
+		}
+
 		public Movie GetMovie(int id)
 		{
 			using (var videoStore = new VideoStoreContext())
@@ -119,7 +140,14 @@ namespace Service
 				UserId = userId
 			};
 
+			var rentedMovie = new RentedMovie
+			{
+				MovieId = movieId,
+				UserId = userId,
+			};
+
 			videoStore.Rentals.Add(rental);
+			videoStore.RentedMovies.Add(rentedMovie);
 		}
 
 		private void DeleteRental(VideoStoreContext videoStore, int id)

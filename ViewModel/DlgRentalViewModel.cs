@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using GalaSoft.MvvmLight;
@@ -20,7 +21,6 @@ namespace ViewModel
 		public DlgRentalViewModel(IVideoStore videoStoreService, IVideoClubRules rules)
 		{
 			_videoStoreService = videoStoreService;
-
 			_rules = rules;
 
 			Movies = new ObservableCollection<MovieViewModel>();
@@ -59,7 +59,10 @@ namespace ViewModel
 
 		public ObservableCollection<UserViewModel> Users { get; private set; }
 
-		public bool CanSelectMovie { get { return _currentUser != null && IsRentingAllowed; } }
+		public bool CanSelectMovie
+		{
+			get { return _currentUser != null && IsRentingAllowed; }
+		}
 
 		public Visibility WarningVisibility { get; private set; }
 
@@ -73,6 +76,21 @@ namespace ViewModel
 			{
 				if (Set(ref _currentUser, value))
 				{
+					// make a copy of the movie list
+					List<MovieViewModel> movies = new List<MovieViewModel>(Movies);
+
+					var rentedMovies = _videoStoreService.GetRentedMoviesByUser(_currentUser.Model.Id);
+
+					Movies.Clear();
+
+					foreach (var movie in movies)
+					{
+						if (!rentedMovies.Any(m => m.MovieId == movie.Model.Id))
+						{
+							Movies.Add(movie);
+						}
+					}
+
 					WarningVisibility = IsRentingAllowed ? Visibility.Hidden : Visibility.Visible;
 
 					RaisePropertyChanged(nameof(Address));
@@ -123,9 +141,15 @@ namespace ViewModel
 			}
 		}
 
-		public string Phone { get { return _currentUser?.Model.Phone; } }
+		public string Phone
+		{
+			get { return _currentUser?.Model.Phone; }
+		}
 
-		public string Email { get { return _currentUser?.Model.Email; } }
+		public string Email
+		{
+			get { return _currentUser?.Model.Email; }
+		}
 
 		public bool? DialogResult
 		{
@@ -135,10 +159,7 @@ namespace ViewModel
 
 		public bool IsInputValid
 		{
-			get
-			{
-				return _currentUser != null && ChosenMovies.Count >= 1;
-			}
+			get { return _currentUser != null && ChosenMovies.Count >= 1; }
 		}
 
 		private bool IsRentingAllowed
@@ -178,6 +199,7 @@ namespace ViewModel
 
 		private void CompleteRental()
 		{
+			// TODO: Add logic here...
 			DialogResult = true;
 		}
 

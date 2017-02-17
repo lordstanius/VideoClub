@@ -36,5 +36,11 @@ namespace Service
 
 		[OperationContract]
 		IEnumerable<Rental> GetRentals();
+
+		[OperationContract]
+		IEnumerable<RentedMovie> GetRentedMoviesByUser(int userId);
+
+		[OperationContract]
+		IEnumerable<RentedMovie> GetRentedMoviesByMovie(int movieId);
 	}
 }

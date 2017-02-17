@@ -66,5 +66,15 @@ namespace ServiceProvider
 		{
 			Channel.DeleteRentals(rentalIds);
 		}
+
+		public IEnumerable<RentedMovie> GetRentedMoviesByUser(int userId)
+		{
+			return Channel.GetRentedMoviesByUser(userId);
+		}
+
+		public IEnumerable<RentedMovie> GetRentedMoviesByMovie(int movieId)
+		{
+			return Channel.GetRentedMoviesByMovie(movieId);
+		}
 	}
 }
