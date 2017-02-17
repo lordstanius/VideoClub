@@ -55,10 +55,15 @@
     <Compile Include="Migrations\201702072333009_initial.Designer.cs">
       <DependentUpon>201702072333009_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702172149206_RentedMovie.cs" />
+    <Compile Include="Migrations\201702172149206_RentedMovie.Designer.cs">
+      <DependentUpon>201702172149206_RentedMovie.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rental.cs" />
+    <Compile Include="RentedMovie.cs" />
     <Compile Include="User.cs" />
     <Compile Include="VideoStoreContext.cs" />
   </ItemGroup>
@@ -69,6 +74,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201702072333009_initial.resx">
       <DependentUpon>201702072333009_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702172149206_RentedMovie.resx">
+      <DependentUpon>201702172149206_RentedMovie.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

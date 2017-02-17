@@ -14,5 +14,7 @@ namespace Model
 		public DbSet<User> Users { get; set; }
 
 		public DbSet<Rental> Rentals { get; set; }
+
+		public DbSet<RentedMovie> RentedMovies { get; set; }
 	}
 }
