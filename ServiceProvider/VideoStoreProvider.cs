@@ -27,24 +27,24 @@ namespace ServiceProvider
 			return Channel.GetUsers();
 		}
 
-		public void AddRental(int userId, int movieId)
+		public void AddRental(Rental rental)
 		{
-			Channel.AddRental(userId, movieId);
+			Channel.AddRental(rental);
 		}
 
-		public void AddRentals(int userId, int[] movieIds)
+		public void AddRentals(IEnumerable<Rental> rentals)
 		{
-			Channel.AddRentals(userId, movieIds);
+			Channel.AddRentals(rentals);
 		}
 
-		public void DeleteRental(int rentalId)
+		public void DeleteRental(Rental rental)
 		{
-			Channel.DeleteRental(rentalId);
+			Channel.DeleteRental(rental);
 		}
 
-		public void DeleteRentals(int[] rentalIds)
+		public void DeleteRentals(IEnumerable<Rental> rentals)
 		{
-			Channel.DeleteRentals(rentalIds);
+			Channel.DeleteRentals(rentals);
 		}
 
 		public Rental GetRental(int id)
@@ -55,16 +55,6 @@ namespace ServiceProvider
 		public IEnumerable<Rental> GetRentals()
 		{
 			return Channel.GetRentals();
-		}
-
-		public void AddRentals(int userId, IEnumerable<int> movieIds)
-		{
-			Channel.AddRentals(userId, movieIds);
-		}
-
-		public void DeleteRentals(IEnumerable<int> rentalIds)
-		{
-			Channel.DeleteRentals(rentalIds);
 		}
 
 		public IEnumerable<RentedMovie> GetRentedMoviesByUser(int userId)

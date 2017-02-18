@@ -20,16 +20,16 @@ namespace Service
 		IEnumerable<User> GetUsers();
 
 		[OperationContract]
-		void AddRental(int userId, int movieId);
+		void AddRental(Rental rental);
 
 		[OperationContract]
-		void AddRentals(int userId, IEnumerable<int> movieIds);
+		void AddRentals(IEnumerable<Rental> rentals);
 
 		[OperationContract]
-		void DeleteRental(int rentalId);
+		void DeleteRental(Rental rental);
 
 		[OperationContract]
-		void DeleteRentals(IEnumerable<int> rentalIds);
+		void DeleteRentals(IEnumerable<Rental> rentals);
 
 		[OperationContract]
 		Rental GetRental(int id);

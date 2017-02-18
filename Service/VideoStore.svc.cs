@@ -8,45 +8,45 @@ namespace Service
 {
 	public class VideoStore : IVideoStore
 	{
-		public void AddRental(int userId, int movieId)
+		public void AddRental(Rental rental)
 		{
 			using (var videoStore = new VideoStoreContext())
 			{
-				AddRental(videoStore, userId, movieId);
-				
+				AddRental(videoStore, rental);
+
 				videoStore.SaveChanges();
 			}
 		}
 
-		public void AddRentals(int userId, IEnumerable<int> movieIds)
+		public void AddRentals(IEnumerable<Rental> rentals)
 		{
 			using (var videoStore = new VideoStoreContext())
 			{
-				foreach (int movieId in movieIds)
+				foreach (var item in rentals)
 				{
-					AddRental(videoStore, userId, movieId);
+					AddRental(videoStore, item);
 				}
 
 				videoStore.SaveChanges();
 			}
 		}
 
-		public void DeleteRental(int id)
+		public void DeleteRental(Rental rental)
 		{
 			using (var videoStore = new VideoStoreContext())
 			{
-				DeleteRental(videoStore, id);
+				DeleteRental(videoStore, rental);
 				videoStore.SaveChanges();
 			}
 		}
 
-		public void DeleteRentals(IEnumerable<int> rentalIds)
+		public void DeleteRentals(IEnumerable<Rental> rentals)
 		{
 			using (var videoStore = new VideoStoreContext())
 			{
-				foreach (int rentalId in rentalIds)
+				foreach (var item in rentals)
 				{
-					DeleteRental(videoStore, rentalId);
+					DeleteRental(videoStore, item);
 				}
 
 				videoStore.SaveChanges();
@@ -130,29 +130,35 @@ namespace Service
 			}
 		}
 
-		private void AddRental(VideoStoreContext videoStore, int userId, int movieId)
+		private void AddRental(VideoStoreContext videoStore, Rental rental)
 		{
-			var rental = new Rental
-			{
-				DateOfRental = DateTime.Now,
-				DueDate = DateTime.Now.AddDays(4),
-				MovieId = movieId,
-				UserId = userId
-			};
-
 			var rentedMovie = new RentedMovie
 			{
-				MovieId = movieId,
-				UserId = userId,
+				MovieId = rental.MovieId,
+				UserId = rental.UserId,
 			};
 
+			--rental.Movie.NumOfCopies;
+			videoStore.Movies.Attach(rental.Movie);
+			videoStore.Entry(rental.Movie).Property(m => m.NumOfCopies).IsModified = true;
+
+			rental.Movie = null;
+			rental.User = null;
 			videoStore.Rentals.Add(rental);
+
 			videoStore.RentedMovies.Add(rentedMovie);
 		}
 
-		private void DeleteRental(VideoStoreContext videoStore, int id)
+		private void DeleteRental(VideoStoreContext videoStore, Rental rental)
 		{
-			var rental = new Rental { Id = id };
+			++rental.Movie.NumOfCopies;
+
+			videoStore.Movies.Attach(rental.Movie);
+			videoStore.Entry(rental.Movie).Property(m => m.NumOfCopies).IsModified = true;
+
+			rental.User = null;
+			rental.Movie = null;	
+
 			videoStore.Rentals.Attach(rental);
 			videoStore.Rentals.Remove(rental);
 		}

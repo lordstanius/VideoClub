@@ -17,5 +17,15 @@
 		/// </summary>
 		bool AllowMultipleRentals { get; }
 
+		/// <summary>
+		/// Returns how many days user is allowed to keep rented movies.
+		/// </summary>
+		/// <param name="numOfMovies">Number of rented movies.</param>
+		int DuePeriod(int numOfMovies);
+
+		/// <summary>
+		/// User is not allowed to rent again movie(s) he had been rented before.
+		/// </summary>
+		bool DoNotAllowRentalOfPreviouslyRentedMovie { get; }
 	}
 }

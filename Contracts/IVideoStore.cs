@@ -13,13 +13,13 @@ namespace Contracts
 
 		IEnumerable<User> GetUsers();
 
-		void AddRental(int userId, int movieId);
+		void AddRental(Rental rental);
 
-		void AddRentals(int userId, IEnumerable<int> movieIds);
+		void AddRentals(IEnumerable<Rental> rentals);
 
-		void DeleteRental(int rentalId);
+		void DeleteRental(Rental rental);
 
-		void DeleteRentals(IEnumerable<int> rentalIds);
+		void DeleteRentals(IEnumerable<Rental> rentals);
 
 		Rental GetRental(int id);
 
