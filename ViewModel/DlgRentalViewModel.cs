@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Model;
 using Contracts;
 using MvvmDialogs;
 
@@ -17,6 +19,7 @@ namespace ViewModel
 		private MovieViewModel _selectedMovie;
 		private IVideoStore _videoStoreService;
 		private IVideoClubRules _rules;
+		private IEnumerable<Movie> _movies;
 
 		public DlgRentalViewModel(IVideoStore videoStoreService, IVideoClubRules rules)
 		{
@@ -27,7 +30,9 @@ namespace ViewModel
 			ChosenMovies = new ObservableCollection<MovieViewModel>();
 			Users = new ObservableCollection<UserViewModel>();
 
-			foreach (var item in _videoStoreService.GetMovies())
+			_movies = _videoStoreService.GetMovies();
+
+			foreach (var item in _movies)
 			{
 				if (item.NumOfCopies > 0)
 				{
@@ -76,18 +81,18 @@ namespace ViewModel
 			{
 				if (Set(ref _currentUser, value))
 				{
-					// make a copy of the movie list
-					List<MovieViewModel> movies = new List<MovieViewModel>(Movies);
-
-					var rentedMovies = _videoStoreService.GetRentedMoviesByUser(_currentUser.Model.Id);
-
-					Movies.Clear();
-
-					foreach (var movie in movies)
+					if (_rules.DoNotAllowRentalOfPreviouslyRentedMovie)
 					{
-						if (!rentedMovies.Any(m => m.MovieId == movie.Model.Id))
+						var rentedMovies = _videoStoreService.GetRentedMoviesByUser(_currentUser.Model.Id);
+						Movies.Clear();
+
+						foreach (var movie in _movies)
 						{
-							Movies.Add(movie);
+							if (!rentedMovies.Any(m => m.MovieId == movie.Id))
+							{
+								// list or previously rented movies does not contain this movie, so it may be rented.
+								Movies.Add(new MovieViewModel(movie));
+							}
 						}
 					}
 
@@ -199,7 +204,26 @@ namespace ViewModel
 
 		private void CompleteRental()
 		{
-			// TODO: Add logic here...
+			var rentals = new List<Rental>(ChosenMovies.Count);
+
+			foreach (var movie in ChosenMovies)
+			{
+				DateTime timeOfRental = DateTime.Now;
+				DateTime dueDate = timeOfRental.AddDays(_rules.DuePeriod(ChosenMovies.Count));
+
+				rentals.Add(new Rental
+				{
+					MovieId = movie.Model.Id,
+					Movie = movie.Model,
+					UserId = _currentUser.Model.Id,
+					User = _currentUser.Model,
+					DateOfRental = timeOfRental,
+					DueDate = dueDate
+				});
+			}
+
+			_videoStoreService.AddRentals(rentals);
+
 			DialogResult = true;
 		}
 

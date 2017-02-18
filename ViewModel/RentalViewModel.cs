@@ -9,6 +9,8 @@ namespace ViewModel
 		{
 		}
 
+		public bool IsSelected { get; set; }
+
 		public DateTimeViewModel DateOfRental
 		{
 			get { return new DateTimeViewModel(Model.DateOfRental); }

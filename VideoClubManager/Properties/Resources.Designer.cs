@@ -69,5 +69,25 @@ namespace VideoClubManager.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon cd_new {
+            get {
+                object obj = ResourceManager.GetObject("cd_new", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon cd_run {
+            get {
+                object obj = ResourceManager.GetObject("cd_run", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

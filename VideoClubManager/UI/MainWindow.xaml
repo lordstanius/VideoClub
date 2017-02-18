@@ -3,7 +3,7 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:local="clr-namespace:VideoClubManager.Local"
+		xmlns:local="clr-namespace:ViewModel.Local;assembly=ViewModel"
 		xmlns:ui="clr-namespace:VideoClubManager.UI"
 		xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
 		xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
@@ -15,7 +15,8 @@
 		Width="800"
 		MinWidth="640"
 		MinHeight="480"
-		DataContext="{Binding Source={StaticResource Locator}, Path=MainWindow}">
+		DataContext="{Binding Source={StaticResource Locator}, Path=MainWindow}"
+		Icon="/Resources/cd_run.ico">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -95,13 +96,19 @@
 		<ListView Margin="10"
 				  Grid.Row="1"
 				  ItemsSource="{Binding Rentals}"
-				  SelectedItem="{Binding CurrentRental, Mode=TwoWay}">
+				  SelectedItem="{Binding CurrentRental, Mode=TwoWay}"
+				  SelectionMode="Extended">
 			<ListView.Resources>
 				<Style TargetType="{x:Type GridViewColumnHeader}">
 					<Setter Property="HorizontalContentAlignment"
 							Value="Left" />
 					<Setter Property="Padding"
 							Value="6, 0" />
+				</Style>
+
+				<Style TargetType="{x:Type ListViewItem}">
+					<Setter Property="IsSelected"
+							Value="{Binding Mode=TwoWay, Path=IsSelected}" />
 				</Style>
 			</ListView.Resources>
 			<ListView.View>
@@ -146,7 +153,9 @@
 
 			<Button Width="150"
 					Height="25"
-					Content="{x:Static local:Strings.txtReturn}" />
+					Content="{x:Static local:Strings.txtReturn}"
+					CommandParameter="{Binding ElementName=ListView, Path=SelectedItems}"
+					Command="{Binding ReturnMovieCommand}"/>
 		</StackPanel>
 	</Grid>
 </Window>

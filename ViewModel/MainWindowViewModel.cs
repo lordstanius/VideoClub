@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Windows;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Model;
@@ -6,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using MvvmDialogs;
 using Contracts;
+using System;
 
 namespace ViewModel
 {
@@ -34,18 +36,21 @@ namespace ViewModel
 
 			ResetFilterCommand = new RelayCommand(ResetFilter, () => _currentFilter != Filter.NoFilter);
 			ShowRentalDialogCommand = new RelayCommand(ShowRentalDialog);
+			ReturnMovieCommand = new RelayCommand(ReturnMovie, () => Rentals.Any(r => r.IsSelected));
 
 			_rentals = _videoStoreService.GetRentals().OrderBy(r => r.Movie.Title);
 
-			ReloadRentals();
-			ReloadUsers();
-			ReloadDatesOfRental();
-			ReloadDueDates();
+			RefreshRentals();
+			RefreshUsers();
+			RefreshDatesOfRental();
+			RefreshDueDates();
 		}
 
 		public RelayCommand ResetFilterCommand { get; private set; }
 
 		public RelayCommand ShowRentalDialogCommand { get; private set; }
+
+		public RelayCommand ReturnMovieCommand { get; private set; }
 
 		public ObservableCollection<RentalViewModel> Rentals { get; set; }
 
@@ -79,7 +84,7 @@ namespace ViewModel
 				{
 					_currentFilter = Filter.User;
 					ResetFilterCommand.RaiseCanExecuteChanged();
-					ReloadRentals();
+					RefreshRentals();
 				}
 			}
 		}
@@ -96,7 +101,7 @@ namespace ViewModel
 				{
 					_currentFilter = Filter.DateOfRental;
 					ResetFilterCommand.RaiseCanExecuteChanged();
-					ReloadRentals();
+					RefreshRentals();
 				}
 			}
 		}
@@ -113,12 +118,12 @@ namespace ViewModel
 				{
 					_currentFilter = Filter.DueDate;
 					ResetFilterCommand.RaiseCanExecuteChanged();
-					ReloadRentals();
+					RefreshRentals();
 				}
 			}
 		}
 
-		private void ReloadRentals()
+		private void RefreshRentals()
 		{
 			Rentals.Clear();
 
@@ -168,7 +173,7 @@ namespace ViewModel
 			}
 		}
 
-		private void ReloadUsers()
+		private void RefreshUsers()
 		{
 			Users.Clear();
 
@@ -183,7 +188,7 @@ namespace ViewModel
 			}
 		}
 
-		private void ReloadDatesOfRental()
+		private void RefreshDatesOfRental()
 		{
 			DateOfRentCollection.Clear();
 
@@ -198,7 +203,7 @@ namespace ViewModel
 			}
 		}
 
-		private void ReloadDueDates()
+		private void RefreshDueDates()
 		{
 			DueDateCollection.Clear();
 
@@ -217,14 +222,47 @@ namespace ViewModel
 		{
 			_currentFilter = Filter.NoFilter;
 			ResetFilterCommand.RaiseCanExecuteChanged();
-			ReloadRentals();
+			RefreshRentals();
 		}
 
 		private void ShowRentalDialog()
 		{
 			var dialogViewModel = new DlgRentalViewModel(_videoStoreService, _rules);
 
-			_dialogService.ShowDialog(this, dialogViewModel);
+			if (_dialogService.ShowDialog(this, dialogViewModel) == true)
+			{
+				_rentals = _videoStoreService.GetRentals();
+				RefreshRentals();
+				RefreshDatesOfRental();
+				RefreshDueDates();
+				RefreshUsers();
+			}
+		}
+
+		private void ReturnMovie()
+		{
+			if (_dialogService.ShowMessageBox(
+				this,
+				Local.Strings.txtReturnConfirmation,
+				Local.Strings.txtConfirmationRequired,
+				MessageBoxButton.YesNo,
+				MessageBoxImage.Question) == MessageBoxResult.Yes)
+			{
+				var rentalsToRemove = new List<Rental>();
+				foreach (var item in Rentals.Where(i => i.IsSelected))
+				{
+					rentalsToRemove.Add(item.Model);
+				}
+
+				_videoStoreService.DeleteRentals(rentalsToRemove);
+
+				// refresh
+				_rentals = _videoStoreService.GetRentals();
+				RefreshRentals();
+				RefreshDatesOfRental();
+				RefreshDueDates();
+				RefreshUsers();
+			}
 		}
 	}
 }

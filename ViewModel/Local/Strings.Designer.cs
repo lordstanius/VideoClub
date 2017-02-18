@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace VideoClubManager.Local {
+namespace ViewModel.Local {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace VideoClubManager.Local {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VideoClubManager.Local.Strings", typeof(Strings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ViewModel.Local.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -93,6 +93,15 @@ namespace VideoClubManager.Local {
         public static string txtCancel {
             get {
                 return ResourceManager.GetString("txtCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmation required.
+        /// </summary>
+        public static string txtConfirmationRequired {
+            get {
+                return ResourceManager.GetString("txtConfirmationRequired", resourceCulture);
             }
         }
         
@@ -246,6 +255,15 @@ namespace VideoClubManager.Local {
         public static string txtReturn {
             get {
                 return ResourceManager.GetString("txtReturn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to return selected movies?.
+        /// </summary>
+        public static string txtReturnConfirmation {
+            get {
+                return ResourceManager.GetString("txtReturnConfirmation", resourceCulture);
             }
         }
         

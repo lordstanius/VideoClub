@@ -5,14 +5,15 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 		xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
-		xmlns:local="clr-namespace:VideoClubManager.Local"
+		xmlns:local="clr-namespace:ViewModel.Local;assembly=ViewModel"
 		WindowStartupLocation="CenterOwner"
 		Title="{x:Static local:Strings.txtNewRental}"
 		ResizeMode="NoResize"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance {x:Type vm:DlgRentalViewModel}}"
 		Height="330"
-		Width="430">
+		Width="430"
+		Icon="/Resources/cd_new.ico">
 
 	<Grid>
 		<Grid.RowDefinitions>
